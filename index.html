@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Recruit Tracker 2017–2019</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f0e;
+  --surface: #1a1a18;
+  --surface2: #242422;
+  --border: #2e2e2b;
+  --text: #f0ede8;
+  --muted: #7a7870;
+  --accent: #d4ff5c;
+  --active-bg: #1d2a0a;
+  --active-text: #d4ff5c;
+  --fringe-bg: #0a1a2a;
+  --fringe-text: #5aaeff;
+  --out-bg: #1e1e1b;
+  --out-text: #6a6862;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { font-size: 16px; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+/* HEADER */
+.header {
+  padding: 20px 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.header-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 1px;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.header-sub {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  flex: 1;
+  min-width: 80px;
+  padding: 10px 4px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  text-align: center;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tab.on {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* STATS BAR */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.stat {
+  background: var(--surface);
+  padding: 12px 8px;
+  text-align: center;
+}
+.stat-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+.stat-val.green { color: var(--accent); }
+.stat-val.blue { color: var(--fringe-text); }
+.stat-val.gray { color: var(--muted); }
+.stat-val.white { color: var(--text); }
+.stat-label {
+  font-size: 9px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+}
+
+/* CONTROLS */
+.controls {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.search-wrap {
+  position: relative;
+}
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+.search-input {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.search-input:focus { border-color: var(--accent); }
+.search-input::placeholder { color: var(--muted); }
+.filter-row {
+  display: flex;
+  gap: 8px;
+}
+.filter-select {
+  flex: 1;
+  padding: 9px 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7870' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+  transition: border-color 0.15s;
+}
+.filter-select:focus { border-color: var(--accent); }
+
+/* STATUS PILLS as filter buttons */
+.pill-row {
+  display: flex;
+  gap: 6px;
+}
+.pill {
+  flex: 1;
+  padding: 7px 6px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-align: center;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  color: var(--muted);
+  background: transparent;
+  transition: all 0.15s;
+}
+.pill.active-pill { border-color: var(--accent); color: var(--accent); background: var(--active-bg); }
+.pill.fringe-pill { border-color: var(--fringe-text); color: var(--fringe-text); background: var(--fringe-bg); }
+.pill.out-pill { border-color: var(--border); color: var(--out-text); background: var(--out-bg); }
+.pill.selected { opacity: 1; }
+.pill:not(.selected) { opacity: 0.45; }
+.pill.all-pill { border-color: var(--muted); color: var(--text); background: transparent; }
+.pill.all-pill.selected { opacity: 1; border-color: var(--text); }
+
+/* PLAYER LIST */
+.list {
+  padding: 0 16px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  transition: border-color 0.15s;
+}
+.card:active { border-color: var(--muted); }
+.rank-col {
+  min-width: 32px;
+  text-align: right;
+  padding-top: 1px;
+}
+.rank {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  color: var(--muted);
+  line-height: 1;
+}
+.info-col { flex: 1; min-width: 0; }
+.player-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 3px;
+}
+.player-meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.pos-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--surface2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.nfl-line {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+.nfl-line.out { color: var(--out-text); }
+.status-col {
+  padding-top: 2px;
+}
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.badge.a { background: var(--active-bg); color: var(--active-text); border: 1px solid #2d4a0a; }
+.badge.f { background: var(--fringe-bg); color: var(--fringe-text); border: 1px solid #0a2a4a; }
+.badge.o { background: var(--out-bg); color: var(--out-text); border: 1px solid var(--border); }
+
+/* PAGINATION */
+.pg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px 16px;
+}
+.pg-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.pg-btn:active { background: var(--surface2); border-color: var(--muted); }
+.pg-btn:disabled { opacity: 0.3; cursor: default; }
+.pg-info {
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+  min-width: 80px;
+}
+
+.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+  font-size: 15px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">RECRUIT TRACKER</div>
+  <div class="header-sub">247Sports Top 247 · NFL Status 2026</div>
+  <div class="tabs">
+    <div class="tab on" onclick="sw(2017)">2017</div>
+    <div class="tab" onclick="sw(2018)">2018</div>
+    <div class="tab" onclick="sw(2019)">2019</div>
+  </div>
+</div>
+
+<div id="statsBar"></div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="sq" type="search" placeholder="Search player or team..." oninput="af()">
+  </div>
+  <div class="filter-row">
+    <select class="filter-select" id="sp" onchange="af()">
+      <option value="">All positions</option>
+    </select>
+  </div>
+  <div class="pill-row">
+    <div class="pill all-pill selected" id="pill-all" onclick="setStatus('')">All</div>
+    <div class="pill active-pill" id="pill-a" onclick="setStatus('a')">Active</div>
+    <div class="pill fringe-pill" id="pill-f" onclick="setStatus('f')">Fringe</div>
+    <div class="pill out-pill" id="pill-o" onclick="setStatus('o')">Out</div>
+  </div>
+</div>
+
+<div class="list" id="list"></div>
+<div class="empty" id="empty" style="display:none">No players match.</div>
+<div class="pg">
+  <button class="pg-btn" id="prevBtn" onclick="gp(-1)">← Prev</button>
+  <div class="pg-info" id="pgInfo"></div>
+  <button class="pg-btn" id="nextBtn" onclick="gp(1)">Next →</button>
+</div>
+
+<script>
+const A='a',F='f',O='o';
+const D={
+2017:[
+[1,"Walker Little","OT","Stanford",F,"Free agent (ex-Jaguars)"],
+[2,"Jaelan Phillips","WDE","UCLA/Miami",A,"Carolina Panthers"],
+[3,"Alex Leatherwood","OT","Alabama",O,"Out of NFL"],
+[4,"Chase Young","WDE","Ohio State",A,"New Orleans Saints"],
+[5,"Trey Smith","OT","Tennessee",A,"Kansas City Chiefs"],
+[6,"A.J. Epenesa","SDE","Iowa",F,"Free agent"],
+[7,"Cam Akers","RB","Florida State",F,"Free agent"],
+[8,"Foster Sarell","OT","Stanford",O,"Out of NFL"],
+[9,"Najee Harris","RB","Alabama",A,"Pittsburgh Steelers"],
+[10,"Baron Browning","OLB","Ohio State",A,"Arizona Cardinals"],
+[11,"K'Lavon Chaisson","WDE","LSU",A,"Washington Commanders"],
+[12,"Jeff Okudah","CB","Ohio State",F,"Free agent"],
+[13,"Marlon Tuipulotu","DT","USC",O,"Out of NFL"],
+[14,"Jay Tufele","DT","USC",O,"Out of NFL"],
+[15,"LaBryan Ray","SDE","Alabama",O,"Out of NFL"],
+[16,"Shaun Wade","CB","Ohio State",O,"Out of NFL"],
+[17,"Richard LeCounte III","S","Georgia",O,"Out of NFL"],
+[18,"T.D. Moultry","ILB","Auburn",O,"Out of NFL"],
+[19,"Davis Mills","PRO QB","Stanford",F,"Free agent"],
+[20,"Joshua Kaindoh","WDE","Florida State",O,"Out of NFL"],
+[21,"Austin Jackson","OT","USC",F,"Free agent"],
+[22,"Tua Tagovailoa","DUAL QB","Alabama",A,"Atlanta Falcons"],
+[23,"JaCoby Stevens","S","LSU",O,"Out of NFL"],
+[24,"Henry Ruggs III","WR","Alabama",O,"Out of NFL (suspended)"],
+[25,"Calvin Ashley","OT","Auburn",O,"Out of NFL"],
+[26,"Donovan Peoples-Jones","WR","Michigan",A,"Cleveland Browns"],
+[27,"Robert Barnes","S","Oklahoma",O,"Out of NFL"],
+[28,"Colby Parkinson","TE","Stanford",A,"Los Angeles Rams"],
+[29,"DeVonta Smith","WR","Alabama",A,"Philadelphia Eagles"],
+[30,"Aubrey Solomon","DT","Michigan/Tennessee",O,"Out of NFL"],
+[31,"Marvin Wilson","DT","Florida State",O,"Out of NFL"],
+[32,"Dylan Moses","OLB","Alabama",O,"Out of NFL"],
+[33,"Willie Gay Jr.","OLB","Mississippi State",A,"Kansas City Chiefs"],
+[34,"Tee Higgins","WR","Clemson",A,"Cincinnati Bengals"],
+[35,"Jerry Jeudy","WR","Alabama",A,"Cleveland Browns"],
+[36,"Luiji Vilain","WDE","Michigan",O,"Out of NFL"],
+[37,"Andrew Thomas","OT","Georgia",A,"New York Giants"],
+[38,"D'Andre Swift","RB","Georgia",A,"Chicago Bears"],
+[39,"Isaiah Wilson","OT","Georgia",O,"Out of NFL"],
+[40,"Khalan Laborn","APB","Florida State",O,"Out of NFL"],
+[41,"Grant Delpit","S","LSU",A,"Cleveland Browns"],
+[42,"D.J. Matthews Jr.","WR","Florida State",O,"Out of NFL"],
+[43,"J.K. Dobbins","APB","Ohio State",A,"Los Angeles Chargers"],
+[44,"Stephen Carr","RB","USC/Indiana",O,"Out of NFL"],
+[45,"Devon Hunter","S","Virginia Tech",O,"Out of NFL"],
+[46,"Jacob Phillips","ILB","LSU",O,"Out of NFL"],
+[47,"Oliver Martin","WR","Michigan/Iowa",O,"Out of NFL"],
+[48,"Elijah Blades","CB","Nebraska",O,"Out of NFL"],
+[49,"Tyjon Lindsey","WR","Nebraska",O,"Out of NFL"],
+[50,"Darnay Holmes","CB","UCLA",A,"New York Giants"],
+[51,"Jake Fromm","PRO QB","Georgia",O,"Out of NFL"],
+[52,"Jeff Thomas","WR","Miami",O,"Out of NFL"],
+[53,"Hunter Johnson","PRO QB","Clemson/Northwestern",O,"Out of NFL"],
+[54,"Xavier McKinney","S","Alabama",A,"New York Giants"],
+[55,"Cesar Ruiz","OC","Michigan",A,"New Orleans Saints"],
+[56,"Jedrick Wills Jr.","OT","Alabama",F,"Free agent"],
+[57,"Christopher Allen","ILB","Alabama",F,"Free agent"],
+[58,"Wyatt Davis","OG","Ohio State",O,"Out of NFL"],
+[59,"Deommodore Lenoir","CB","Oregon",A,"San Francisco 49ers"],
+[60,"Justin Broiles","CB","Oklahoma",O,"Out of NFL"],
+[61,"A.J. Terrell","CB","Clemson",A,"Atlanta Falcons"],
+[62,"Ambry Thomas","CB","Michigan",O,"Out of NFL"],
+[63,"Josh Myers","OG","Ohio State",F,"Free agent"],
+[64,"Jhamon Ausbon","WR","Texas A&M",O,"Out of NFL"],
+[65,"D.J. Johnson","WDE","Miami",O,"Out of NFL"],
+[66,"Paris Ford","S","Pittsburgh",O,"Out of NFL"],
+[67,"Stanford Samuels","CB","Florida State",O,"Out of NFL"],
+[68,"Deangelo Gibbs","S","Georgia/Tennessee",O,"Out of NFL"],
+[69,"Jalen Reagor","WR","TCU",O,"Out of NFL"],
+[70,"Tyrell Shavers","WR","Alabama/Miss. State",O,"Out of NFL"],
+[71,"Salvon Ahmed","ATH","Washington",O,"Out of NFL"],
+[72,"Trevon Grimes","WR","Ohio State/Florida",O,"Out of NFL"],
+[73,"Joseph Lewis","WR","USC",O,"Out of NFL"],
+[74,"Haskell Garrett","DT","Ohio State",O,"Out of NFL"],
+[75,"Bubba Bolden","S","USC/Miami",O,"Out of NFL"],
+[76,"Tyler Shelvin","DT","LSU",O,"Out of NFL"],
+[77,"Isaiah Pryor","S","Ohio State",O,"Out of NFL"],
+[78,"Jake Moretti","OT","Colorado",O,"Out of NFL"],
+[79,"Ty Chandler","RB","Tennessee/North Carolina",F,"Free agent"],
+[80,"Josh Falo","TE","USC",O,"Out of NFL"],
+[81,"Navaughn Donaldson","OT","Miami",O,"Out of NFL"],
+[82,"Kary Vincent Jr.","CB","LSU",O,"Out of NFL"],
+[83,"Ty Jones","WR","Washington",O,"Out of NFL"],
+[84,"Todd Harris","S","LSU",O,"Out of NFL"],
+[85,"Lamont Wade","CB","Penn State",O,"Out of NFL"],
+[86,"Josh Lugg","OT","Notre Dame",O,"Out of NFL"],
+[87,"Jamyest Williams","CB","South Carolina",O,"Out of NFL"],
+[88,"Cole Kmet","TE","Notre Dame",A,"Chicago Bears"],
+[89,"Tedarrell Slaton","OG","Florida",O,"Out of NFL"],
+[90,"Jack Anderson","OG","Texas Tech",O,"Out of NFL"],
+[91,"Austin Deculus","OT","LSU",O,"Out of NFL"],
+[92,"Tate Martell","DUAL QB","Ohio State/Miami",O,"Out of NFL"],
+[93,"VanDarius Cowan","OLB","Alabama",O,"Out of NFL"],
+[94,"Benjamin St-Juste","CB","Michigan",A,"Washington Commanders"],
+[95,"Earnest Brown IV","SDE","Northwestern",O,"Out of NFL"],
+[96,"Hamsah Nasirildeen","S","Florida State",O,"Out of NFL"],
+[97,"Nick Brahms","OG","Auburn",O,"Out of NFL"],
+[98,"Jeremiah Holloman","WR","Georgia",O,"Out of NFL"],
+[99,"Chuck Filiaga","OT","Michigan",O,"Out of NFL"],
+[100,"Drew Singleton","OLB","Michigan",O,"Out of NFL"],
+[101,"Jaylon Johnson","CB","Utah",A,"Chicago Bears"],
+[102,"Levi Draper","ILB","Oklahoma",O,"Out of NFL"],
+[103,"Tre Brown","CB","Oklahoma",F,"Free agent"],
+[104,"Amari Rodgers","WR","Clemson",O,"Out of NFL"],
+[105,"OrTre Smith","WR","South Carolina",O,"Out of NFL"],
+[106,"Jordan Williams","WDE","Clemson",O,"Out of NFL"],
+[107,"Isaiah Pola-Mao","S","USC/Arizona",O,"Out of NFL"],
+[108,"Jayden Peevy","DT","Texas A&M",O,"Out of NFL"],
+[109,"James Hudson III","DT","Michigan",O,"Out of NFL"],
+[110,"Lynn Bowden Jr.","ATH","Kentucky",O,"Out of NFL"],
+[111,"CJ Thorpe","OG","Penn State",O,"Out of NFL"],
+[112,"Myles Brennan","PRO QB","LSU",O,"Out of NFL"],
+[113,"Tray Bishop","CB","Georgia",O,"Out of NFL"],
+[114,"Will Ignont","ILB","Tennessee",O,"Out of NFL"],
+[115,"Netori Johnson","OG","Georgia",O,"Out of NFL"],
+[116,"CJ Henderson","CB","Florida",F,"Free agent"],
+[117,"Paulson Adebo","CB","Stanford",A,"New Orleans Saints"],
+[118,"Mark Webb","WR","Georgia",O,"Out of NFL"],
+[119,"D.D. Bowie","WR","Ole Miss",O,"Out of NFL"],
+[120,"Levi Jones","OLB","USC",O,"Out of NFL"],
+[121,"Montaric Brown","S","Arkansas",F,"Free agent"],
+[122,"Jake Ferguson","TE","Wisconsin",A,"Dallas Cowboys"],
+[123,"Cyrus Fagan","S","Florida State",O,"Out of NFL"],
+[124,"Kylin Hill","RB","Mississippi State",O,"Out of NFL"],
+[125,"Tylan Wallace","WR","Oklahoma State",F,"Free agent"],
+[126,"Tristan Wirfs","OT","Iowa",A,"Tampa Bay Buccaneers"],
+[127,"Micah Clark","OT","Rutgers",O,"Out of NFL"],
+[128,"Cordarrian Richardson","RB","UCF",O,"Out of NFL"],
+[129,"Austin Troxell","OT","Auburn",O,"Out of NFL"],
+[130,"James Robinson","WR","Florida",O,"Out of NFL"],
+[131,"ZaQuandre White","RB","Florida State",O,"Out of NFL"],
+[132,"Jonah Melton","OG","North Carolina",O,"Out of NFL"],
+[133,"Brendon White","ATH","Ohio State",O,"Out of NFL"],
+[134,"Justin Foster","WDE","Clemson",O,"Out of NFL"],
+[135,"Robert Hainsey","OG","Notre Dame",A,"Tampa Bay Buccaneers"],
+[136,"Jake Lawler","WDE","North Carolina",O,"Out of NFL"],
+[137,"Anthony Hines III","ILB","Texas A&M",O,"Out of NFL"],
+[138,"Tyrese Robinson","OG","Oklahoma",O,"Out of NFL"],
+[139,"Abraham Lucas","OT","Washington State",A,"Los Angeles Chargers"],
+[140,"Maleik Gray","S","Tennessee",O,"Out of NFL"],
+[141,"Alijah Vera-Tucker","OT","USC",A,"New England Patriots"],
+[142,"Keytaon Thompson","DUAL QB","Miss. State/VT",O,"Out of NFL"],
+[143,"Wes Harris","OG","TCU",O,"Out of NFL"],
+[144,"Creed Humphrey","OC","Oklahoma",A,"Kansas City Chiefs"],
+[145,"Jarez Parks","WDE","Alabama",O,"Out of NFL"],
+[146,"Thomas Graham Jr.","CB","Oregon",O,"Out of NFL"],
+[147,"Robert Beal Jr.","WDE","Georgia",O,"Out of NFL"],
+[148,"Henry Bainivalu","OT","Washington",O,"Out of NFL"],
+[149,"Sione Lund","RB","Stanford",O,"Out of NFL"],
+[150,"Brett Neilon","OC","USC",O,"Out of NFL"],
+[151,"Bo Melton","WR","Rutgers",O,"Out of NFL"],
+[152,"Chaz Ah You","S","BYU",O,"Out of NFL"],
+[153,"Brad Stewart","CB","Florida",O,"Out of NFL"],
+[154,"Sampson Niu","ILB","Oregon",O,"Out of NFL"],
+[155,"Derrick Tucker","S","Texas A&M",O,"Out of NFL"],
+[156,"Jaylen Kelly-Powell","S","Michigan",O,"Out of NFL"],
+[157,"Markail Benton","OLB","Alabama",O,"Out of NFL"],
+[158,"Langi Tuifua","WDE","BYU",O,"Out of NFL"],
+[159,"Shi Smith","ATH","South Carolina",F,"Free agent"],
+[160,"Anthony McFarland Jr.","APB","Maryland",O,"Out of NFL"],
+[161,"Obinna Eze","OT","Memphis",O,"Out of NFL"],
+[162,"Marcus Williamson","CB","Ohio State",O,"Out of NFL"],
+[163,"Devonte Wyatt","DT","Georgia",A,"Green Bay Packers"],
+[164,"Damion Miller","WR","Texas",O,"Out of NFL"],
+[165,"Jaylen Harris","WR","Ohio State",O,"Out of NFL"],
+[166,"Jack Sears","PRO QB","USC",O,"Out of NFL"],
+[167,"Koilan Jackson","WR","Arkansas",O,"Out of NFL"],
+[168,"Tyrell Ajian","ATH","Kentucky",O,"Out of NFL"],
+[169,"Rutger Reitmaier","DT","Oregon",O,"Out of NFL"],
+[170,"Jerron Cage","DT","Ohio State",O,"Out of NFL"],
+[171,"Marco Wilson","CB","Florida",A,"Arizona Cardinals"],
+[172,"Drake Deiuliis","TE","Virginia Tech",O,"Out of NFL"],
+[173,"Drew Jordan","WDE","Duke",O,"Out of NFL"],
+[174,"Elijah Molden","CB","Washington",A,"Tennessee Titans"],
+[175,"Malik Herring","SDE","Georgia",O,"Out of NFL"],
+[176,"Osiris St. Brown","WR","Stanford",O,"Out of NFL"],
+[177,"Alex Perry","CB","Arizona State",O,"Out of NFL"],
+[178,"Caleb Farley","ATH","Virginia Tech",O,"Out of NFL"],
+[179,"Deontre Thomas","DT","Nebraska",O,"Out of NFL"],
+[180,"Greg Johnson","ATH","USC",O,"Out of NFL"],
+[181,"Kayden Lyles","OG","Wisconsin",O,"Out of NFL"],
+[182,"Dalton Keene","ATH","Virginia Tech",O,"Out of NFL"],
+[183,"Chuba Hubbard","RB","Oklahoma State",A,"Carolina Panthers"],
+[184,"Aaron Banks","OT","Notre Dame",A,"San Francisco 49ers"],
+[185,"Yetur Gross-Matos","SDE","Penn State",O,"Out of NFL"],
+[186,"Deron Irving-Bey","SDE","Michigan",O,"Out of NFL"],
+[187,"Chase Hayden","APB","Arkansas",O,"Out of NFL"],
+[188,"Brock Wright","TE","Notre Dame",A,"Detroit Lions"],
+[189,"Damion Barber","SDE","Penn State",O,"Out of NFL"],
+[190,"Josh Paschal","SDE","Kentucky",O,"Out of NFL"],
+[191,"Nathan Tilford","RB","Arizona",O,"Out of NFL"],
+[192,"Eno Benjamin","RB","Arizona State",O,"Out of NFL"],
+[193,"Tarik Black","WR","Michigan",O,"Out of NFL"],
+[194,"Jonathan Garvin","SDE","Miami",O,"Out of NFL"],
+[195,"Grayson Reed","OT","Texas A&M",O,"Out of NFL"],
+[196,"Phidarian Mathis","DT","Alabama",O,"Out of NFL"],
+[197,"Kendall Randolph","OG","Alabama",O,"Out of NFL"],
+[198,"Dalyn Wade-Perry","DT","Stanford",O,"Out of NFL"],
+[199,"Nico Collins","WR","Michigan",A,"Houston Texans"],
+[200,"Daniel Wright","S","Alabama",O,"Out of NFL"],
+[201,"Josh Ross","ILB","Michigan",O,"Out of NFL"],
+[202,"Michael Warren II","RB","Cincinnati",O,"Out of NFL"],
+[203,"Dylan McCaffrey","PRO QB","Michigan",O,"Out of NFL"],
+[204,"Ja'len Parks","DT","Florida State",O,"Out of NFL"],
+[205,"D'Antne Demery","OT","Georgia",O,"Out of NFL"],
+[206,"Andrew Vorhees","OT","USC",O,"Out of NFL"],
+[207,"Sam Ehlinger","DUAL QB","Texas",O,"Out of NFL"],
+[208,"Darnell Ewell","DT","Notre Dame",O,"Out of NFL"],
+[209,"Jordan Anthony","OLB","Michigan",O,"Out of NFL"],
+[210,"Chadarius Townsend","ATH","Alabama",O,"Out of NFL"],
+[211,"Devan Barrett","RB","Auburn",O,"Out of NFL"],
+[212,"Hunter Echols","WDE","USC",O,"Out of NFL"],
+[213,"Ta'Quon Graham","WDE","Texas",O,"Out of NFL"],
+[214,"Brandon McKinney","S","Washington",O,"Out of NFL"],
+[215,"Randal Grimes","ATH","USC",O,"Out of NFL"],
+[216,"Aubrey Miller Jr.","OLB","Missouri",O,"Out of NFL"],
+[217,"Devin Morris","CB","Texas A&M",O,"Out of NFL"],
+[218,"Brad Johnson","WDE","South Carolina",O,"Out of NFL"],
+[219,"David Morris","OLB","Oregon State",O,"Out of NFL"],
+[220,"Grant Calcaterra","TE","Oklahoma",A,"Philadelphia Eagles"],
+[221,"Thayer Munford Jr.","OT","Ohio State",F,"Free agent"],
+[222,"Dylan Rivers","OLB","Virginia Tech",O,"Out of NFL"],
+[223,"Brian Robinson Jr.","RB","Alabama",A,"Washington Commanders"],
+[224,"Connor Wedington","ATH","Stanford",O,"Out of NFL"],
+[225,"TreSean Smith","S","Louisville",O,"Out of NFL"],
+[226,"Nathan Proctor","OLB","Virginia Tech",O,"Out of NFL"],
+[227,"James Blackman","PRO QB","Florida State",O,"Out of NFL"],
+[228,"Xavier Newman","OG","Baylor",O,"Out of NFL"],
+[229,"Jordan Genmark Heath","S","Notre Dame",O,"Out of NFL"],
+[230,"Markquese Bell","ATH","Maryland",O,"Out of NFL"],
+[231,"Jordan Murphy","WR","Tennessee",O,"Out of NFL"],
+[232,"Ed Ingram","OG","LSU",A,"Minnesota Vikings"],
+[233,"AJ Dillon","ATH","Boston College",F,"Free agent"],
+[234,"Greg Rogers","DT","UCLA",O,"Out of NFL"],
+[235,"Tariq Castro-Fields","CB","Penn State",O,"Out of NFL"],
+[236,"Ben Petrula","OG","Boston College",O,"Out of NFL"],
+[237,"Jaden Hunter","OLB","Georgia",O,"Out of NFL"],
+[238,"K.J. Britt","ILB","Auburn",F,"Free agent"],
+[239,"Shanon Reid","OLB","Tennessee",O,"Out of NFL"],
+[240,"Keith Taylor Jr.","CB","Washington",O,"Out of NFL"],
+[241,"Mark Kallenberger","OT","Iowa",O,"Out of NFL"],
+[242,"Travis Etienne Jr.","RB","Clemson",A,"New Orleans Saints"],
+[243,"Tyjuan Garbutt","ATH","Virginia Tech",O,"Out of NFL"],
+[244,"Hendon Hooker","DUAL QB","VT/Tennessee",A,"Dallas Cowboys"],
+[245,"CeeDee Lamb","WR","Oklahoma",A,"Dallas Cowboys"],
+[246,"Myron Tagovailoa-Amosa","SDE","Notre Dame",A,"Buffalo Bills"],
+[247,"Darnay Holmes","CB","UCLA",A,"New York Giants"]
+],
+2018:[
+[1,"Trevor Lawrence","PRO QB","Clemson",A,"Jacksonville Jaguars"],
+[2,"Justin Fields","DUAL QB","Georgia/Ohio State",A,"Kansas City Chiefs"],
+[3,"Eyabi Okie-Anoma","WDE","Alabama/Houston",O,"UFL (Arlington Renegades)"],
+[4,"Xavier Thomas","SDE","Clemson",O,"Out of NFL"],
+[5,"Micah Parsons","WDE","Penn State",A,"Green Bay Packers"],
+[6,"JT Daniels","PRO QB","USC/Georgia/WVU",O,"Out of NFL"],
+[7,"Justin Shorter","WR","Penn State/Florida",O,"Out of NFL"],
+[8,"Jamaree Salyer","OG","Georgia",A,"Los Angeles Chargers"],
+[9,"Nicholas Petit-Frere","OT","Ohio State",O,"Out of NFL"],
+[10,"Amon-Ra St. Brown","WR","USC",A,"Detroit Lions"],
+[11,"Patrick Surtain II","CB","Alabama",A,"Denver Broncos"],
+[12,"Tyson Campbell","CB","Georgia",A,"Cleveland Browns"],
+[13,"Zamir White","RB","Georgia",F,"Free agent (ex-Raiders)"],
+[14,"Jordyn Adams","WR","North Carolina",A,"Carolina Panthers"],
+[15,"Brey Walker","OT","Oklahoma",O,"Out of NFL"],
+[16,"Jalen Redmond","WDE","Oklahoma",A,"Minnesota Vikings"],
+[17,"Jalen Green","CB","Texas",O,"Out of NFL"],
+[18,"Jeremy Ruckert","TE","Ohio State",F,"Free agent (ex-Jets)"],
+[19,"Ja'Marr Chase","WR","LSU",A,"Cincinnati Bengals"],
+[20,"Terrace Marshall Jr.","WR","LSU",F,"Miami Dolphins (futures)"],
+[21,"Ale Kaho","ILB","Alabama",A,"Tennessee Titans"],
+[22,"Palaie Gaoteote IV","ILB","USC/Tennessee",O,"Out of NFL"],
+[23,"Channing Tindall","ILB","Georgia",A,"Miami Dolphins"],
+[24,"Cameron McGrone","OLB","Michigan",O,"Out of NFL"],
+[25,"Josh Belk","DT","Clemson",O,"Out of NFL"],
+[26,"KJ Henry","WDE","Clemson",A,"Philadelphia Eagles"],
+[27,"Adam Anderson","OLB","Georgia",O,"Legal issues / Out of NFL"],
+[28,"DeMarvion Overshown","S","Texas",A,"Dallas Cowboys"],
+[29,"Talanoa Hufanga","ATH","USC",A,"Denver Broncos"],
+[30,"Derion Kendrick","WR","Clemson/Georgia",A,"Los Angeles Rams"],
+[31,"Quay Walker","OLB","Georgia",A,"Las Vegas Raiders"],
+[32,"Caden Sterns","S","Texas",O,"Out of NFL"],
+[33,"Olaijah Griffin","CB","USC",O,"Out of NFL"],
+[34,"Taron Vincent","DT","Ohio State",O,"Out of NFL"],
+[35,"Isaac Taylor-Stuart","CB","USC",O,"Out of NFL"],
+[36,"Kamryn Babb","WR","Ohio State",O,"Out of NFL"],
+[37,"B.J. Foster","S","Texas",O,"Out of NFL"],
+[38,"Tanner McKee","PRO QB","Stanford",A,"Philadelphia Eagles"],
+[39,"Payton Wilson","OLB","NC State",A,"Pittsburgh Steelers"],
+[40,"Josh Jobe","CB","Alabama",A,"New England Patriots"],
+[41,"Ricky Person Jr.","RB","NC State",O,"Out of NFL"],
+[42,"Nesta Jade Silvera","DT","Miami",O,"Out of NFL"],
+[43,"Mark Pope","WR","Miami",O,"Out of NFL"],
+[44,"Lorenzo Lingard","RB","Miami/Oklahoma",O,"Out of NFL"],
+[45,"Jayson Ademilola","DT","Notre Dame",F,"Free agent"],
+[46,"Brendan Radley-Hiles","CB","Oklahoma/Washington",O,"Out of NFL"],
+[47,"Rasheed Walker","OT","Penn State",F,"Free agent (ex-Packers)"],
+[48,"Shayne Simon","OLB","Notre Dame",O,"Out of NFL"],
+[49,"Jackson Carman","OT","Clemson",O,"Out of NFL"],
+[50,"Josh Proctor","S","Ohio State",F,"Free agent"],
+[51,"Tyreke Johnson","S","Ohio State",O,"Out of NFL"],
+[52,"Justin Rogers","DUAL QB","TCU",O,"Out of NFL"],
+[53,"Penei Sewell","OG","Oregon",A,"Detroit Lions"],
+[54,"Solomon Tuliaupupu","ILB","USC",O,"Out of NFL"],
+[55,"Jaiden Lars-Woodbey","S","FSU/Boston College",O,"Out of NFL"],
+[56,"Ron Tatum","SDE","Oklahoma",O,"Out of NFL"],
+[57,"Ronnie Perkins","WDE","Oklahoma",O,"Out of NFL"],
+[58,"Tyreke Smith","WDE","Ohio State",O,"Out of NFL"],
+[59,"Dallas Gant","OLB","Ohio State",O,"Out of NFL"],
+[60,"Brenton Cox Jr.","SDE","Georgia/Florida",F,"Free agent"],
+[61,"Cade Mays","OT","Georgia/Tennessee",A,"Detroit Lions"],
+[62,"Ricky Slade","APB","Penn State/UCF",O,"Out of NFL"],
+[63,"Jaelen Gill","APB","Ohio State/BC",O,"Out of NFL"],
+[64,"Jaylen Waddle","WR","Alabama",A,"Denver Broncos"],
+[65,"Justin Dedich","OC","USC",A,"Los Angeles Chargers"],
+[66,"Dorian Thompson-Robinson","DUAL QB","UCLA",F,"UFL / ex-Browns"],
+[67,"Dax Hollifield","ILB","Virginia Tech",F,"Free agent"],
+[68,"William Barnes","OT","North Carolina",O,"Out of NFL"],
+[69,"Matthew Jones","OC","Ohio State",O,"Out of NFL"],
+[70,"Jalyn Armour-Davis","CB","Alabama",O,"Out of NFL"],
+[71,"Odafe Oweh","SDE","Penn State",A,"Washington Commanders"],
+[72,"Brevin Jordan","TE","Miami",F,"Houston Texans (injured)"],
+[73,"Otis Reese","OLB","Georgia",O,"Out of NFL"],
+[74,"J.J. Peterson","OLB","Tennessee",O,"Out of NFL"],
+[75,"Josh Vann","WR","South Carolina",O,"Out of NFL"],
+[76,"Michael Thompson","DT","Oklahoma",O,"Out of NFL"],
+[77,"Brennan Eagles","WR","Texas",O,"Out of NFL"],
+[78,"Trey Hill","OG","Georgia",O,"Out of NFL"],
+[79,"Max Wray","OT","Ohio State",O,"Out of NFL"],
+[80,"Marquis Spiker","WR","Washington",O,"Out of NFL"],
+[81,"Brian Snead","RB","Ohio State",O,"Out of NFL"],
+[82,"Azeez Ojulari","WDE","Georgia",A,"New York Giants"],
+[83,"Kelvin Joseph","S","LSU/Kentucky",F,"Free agent"],
+[84,"Kyler McMichael","CB","Clemson",O,"Out of NFL"],
+[85,"PJ Mustipher","DT","Penn State",O,"Out of NFL"],
+[86,"Leon O'Neal Jr.","S","Texas A&M",F,"Free agent"],
+[87,"A.J. Lytton","CB","Florida State",O,"Out of NFL"],
+[88,"Aidan Hutchinson","SDE","Michigan",A,"Detroit Lions"],
+[89,"Jarren Williams","PRO QB","Miami",O,"Out of NFL"],
+[90,"Matt Corral","PRO QB","Ole Miss",O,"Out of NFL"],
+[91,"Joey Gatewood","ATH","Auburn/Kentucky",O,"Out of NFL"],
+[92,"Tommy Togiai","DT","Ohio State",O,"Out of NFL"],
+[93,"Luke Ford","TE","Georgia/Illinois",O,"Out of NFL"],
+[94,"Tyler Shough","PRO QB","Oregon/Texas Tech",A,"New Orleans Saints"],
+[95,"Stephon Wynn Jr.","SDE","Alabama",O,"Out of NFL"],
+[96,"James Cook","APB","Georgia",A,"Buffalo Bills"],
+[97,"Colten Blanton","OT","Texas A&M",O,"Out of NFL"],
+[98,"Jacob Copeland","WR","Florida",O,"Out of NFL"],
+[99,"Devon Williams","WR","USC/Oregon",O,"Out of NFL"],
+[100,"Coynis Miller","DT","Auburn",O,"Out of NFL"],
+[101,"Justyn Ross","WR","Clemson",F,"Free agent"],
+[102,"Matthew Hill","WR","Auburn",O,"Out of NFL"],
+[103,"D'Shawn Jamison","CB","Texas",O,"Out of NFL"],
+[104,"Ayodele Adeoye","ILB","Texas",O,"Out of NFL"],
+[105,"Jack Lamb","ILB","Notre Dame",O,"Out of NFL"],
+[106,"Bryan Addison","ATH","Oregon",O,"Out of NFL"],
+[107,"Kyler Gordon","CB","Washington",A,"Chicago Bears"],
+[108,"Tyler Manoa","DT","UCLA",O,"Out of NFL"],
+[109,"Justin Mascoll","WDE","Clemson",O,"Out of NFL"],
+[110,"Jack Tuttle","PRO QB","Utah",O,"Out of NFL"],
+[111,"Zack Kuntz","TE","Penn State/ODU",F,"Free agent"],
+[112,"Greg Emerson","DT","Tennessee",O,"Out of NFL"],
+[113,"Rick Sandidge","DT","South Carolina",O,"Out of NFL"],
+[114,"Tre'Shaun Harrison","ATH","Florida State",O,"Out of NFL"],
+[115,"Phil Jurkovec","DUAL QB","Notre Dame/BC/Pitt",O,"Out of NFL"],
+[116,"Justin Watkins","WR","Florida",O,"Out of NFL"],
+[117,"Alim McNeill","DT","NC State",A,"Detroit Lions"],
+[118,"Rondale Moore","WR","Purdue",F,"Free agent"],
+[119,"Colson Yankoff","DUAL QB","Washington",O,"Out of NFL"],
+[120,"Anthony Cook","CB","Texas",F,"Free agent"],
+[121,"Abdul-Malik McClain","WDE","USC",O,"Out of NFL"],
+[122,"Kyle Pitts","TE","Florida",A,"Atlanta Falcons"],
+[123,"Cam Jurgens","OC","Nebraska",A,"Philadelphia Eagles"],
+[124,"Tuli Letuligasenoa","DT","Washington",O,"Out of NFL"],
+[125,"DaShaun White","OLB","Oklahoma",O,"Out of NFL"],
+[126,"Jalen Mayfield","OT","Michigan",O,"Out of NFL"],
+[127,"Javontae Jean-Baptiste","OLB","Ohio State/Colorado",F,"Free agent"],
+[128,"Chase Cota","WR","UCLA/Oregon",O,"Out of NFL"],
+[129,"Dante Stills","SDE","West Virginia",F,"Free agent"],
+[130,"Merlin Robertson","OLB","Arizona State",O,"Out of NFL"],
+[131,"Junior Angilau","OT","Texas",O,"Out of NFL"],
+[132,"Rodrick Fisher","WR","Washington State",O,"Out of NFL"],
+[133,"Harold Joiner","RB","Auburn",O,"Out of NFL"],
+[134,"Teradja Mitchell","ILB","Ohio State",O,"Out of NFL"],
+[135,"Nana Asiedu","OT","Penn State",O,"Out of NFL"],
+[136,"Raymond Scott","OLB","USC",O,"Out of NFL"],
+[137,"Austin Fontaine","DT","Maryland",O,"Out of NFL"],
+[138,"Jevon Holland","S","Oregon",A,"New York Giants"],
+[139,"Master Teague III","RB","Ohio State",O,"Out of NFL"],
+[140,"Ryan Hayes","OT","Michigan",O,"Out of NFL"],
+[141,"Kevin Austin Jr.","WR","Notre Dame",O,"Out of NFL"],
+[142,"Bobby Brown III","DT","Texas A&M",O,"Out of NFL"],
+[143,"Max Wright","SDE","Texas A&M",O,"Out of NFL"],
+[144,"Avery Jones","OG","North Carolina",O,"Out of NFL"],
+[145,"Richard Gouraige","OT","Florida",O,"Out of NFL"],
+[146,"Mychale Salahuddin","APB","Pittsburgh",O,"Out of NFL"],
+[147,"Joshua Moore","WR","Texas",O,"Out of NFL"],
+[148,"Houston Griffith","CB","Notre Dame",O,"Out of NFL"],
+[149,"Trey Lowe","APB","Washington",O,"Out of NFL"],
+[150,"Braden Lenzy","ATH","Notre Dame",O,"Out of NFL"],
+[151,"Jaelyn Duncan","OT","Maryland",O,"Out of NFL"],
+[152,"Robert Cooper","DT","Florida State",O,"Out of NFL"],
+[153,"Tommy Brown","OG","Alabama",O,"Out of NFL"],
+[154,"Tyler Friday","DT","Ohio State",O,"Out of NFL"],
+[155,"Micah Baskerville","ILB","LSU",O,"Out of NFL"],
+[156,"Kwantel Raines","S","West Virginia",O,"Out of NFL"],
+[157,"Chris Murray","OG","UCLA",O,"Out of NFL"],
+[158,"Stephan Blaylock","S","UCLA",O,"Out of NFL"],
+[159,"Chase Williams","CB","USC",O,"Out of NFL"],
+[160,"Mario Goodrich","ATH","Clemson",O,"Out of NFL"],
+[161,"Derrik Allen","S","Notre Dame",O,"Out of NFL"],
+[162,"Aashari Crosswell","S","Arizona State",O,"Out of NFL"],
+[163,"Zakoby McClain","OLB","Auburn",O,"Out of NFL"],
+[164,"Kana'i Mauga","OLB","USC",O,"Out of NFL"],
+[165,"Xavier Peters","OLB","Florida State",O,"Out of NFL"],
+[166,"Tevailance Hunt","WR","TCU",O,"Out of NFL"],
+[167,"Spencer Sanders","DUAL QB","Oklahoma State",O,"Out of NFL"],
+[168,"Asante Samuel Jr.","CB","Florida State",F,"Pittsburgh Steelers"],
+[169,"Brian Hightower","WR","Miami",O,"Out of NFL"],
+[170,"Bo Calvert","OLB","UCLA",O,"Out of NFL"],
+[171,"Jacob Sirmon","PRO QB","Washington",O,"Out of NFL"],
+[172,"Cameron Latu","WDE","Alabama",A,"San Francisco 49ers"],
+[173,"Emory Jones","DUAL QB","Florida",O,"Out of NFL"],
+[174,"Trill Williams","ATH","Syracuse",O,"Out of NFL"],
+[175,"Tyler Linderbaum","OC","Iowa",A,"Las Vegas Raiders"],
+[176,"Malik Heath","WR","Mississippi State",O,"Out of NFL"],
+[177,"Julius Irvin","S","Washington",O,"Out of NFL"],
+[178,"Darian Kinnard","OT","Kentucky",O,"Out of NFL"],
+[179,"Jaquayln Crawford","ATH","Oklahoma",O,"Out of NFL"],
+[180,"Smoke Monday","ATH","Auburn",O,"Out of NFL"],
+[181,"Emil Ekiyor","OC","Alabama",O,"Out of NFL"],
+[182,"Jamien Sherwood","S","Auburn",F,"Free agent"],
+[183,"Gurvan Hall","S","Miami",O,"Out of NFL"],
+[184,"Davion Williams","CB","Michigan State",O,"Out of NFL"],
+[185,"T.J. Pledger","APB","Oklahoma",O,"Out of NFL"],
+[186,"Isaah Crocker","WR","Oregon",O,"Out of NFL"],
+[187,"Qadir White","OT","Syracuse",O,"Out of NFL"],
+[188,"Mike Jones Jr.","OLB","Clemson",O,"Out of NFL"],
+[189,"Jordan Davis","WDE","Alabama",A,"Philadelphia Eagles"],
+[190,"Jordan Young","WR","Florida State",O,"Out of NFL"],
+[191,"Joseph Ossai","WDE","Texas",A,"New York Jets"],
+[192,"CJ Moore","WR","Oklahoma State",O,"Out of NFL"],
+[193,"Jalen Preston","WR","Texas A&M",O,"Out of NFL"],
+[194,"Keondre Coburn","DT","Texas",O,"Out of NFL"],
+[195,"Jack Sanborn","ILB","Wisconsin",A,"Chicago Bears"],
+[196,"Marquan McCall","OG","Kentucky",O,"Out of NFL"],
+[197,"Al'vonte Woodard","WR","Texas",O,"Out of NFL"],
+[198,"Keaontay Ingram","RB","Texas/USC",O,"Out of NFL"],
+[199,"Trevon Moehrig","CB","TCU",A,"Carolina Panthers"],
+[200,"Taiyon Palmer","CB","NC State",O,"Out of NFL"],
+[201,"Gilbert Frierson","CB","Miami",O,"Out of NFL"],
+[202,"Jarell Cherry","WDE","LSU",O,"Out of NFL"],
+[203,"DJ Ivey","CB","Miami",O,"Out of NFL"],
+[204,"Blue Smith","ATH","Ohio State",O,"Out of NFL"],
+[205,"Rashod Bateman","WR","Minnesota",F,"Free agent"],
+[206,"Jeffrey Jenkins","OG","Iowa",O,"Out of NFL"],
+[207,"Nik Bonitto","OLB","Oklahoma",A,"Denver Broncos"],
+[208,"Kyle Philips","WR","UCLA",O,"Out of NFL"],
+[209,"Kearis Jackson","WR","Georgia",O,"Out of NFL"],
+[210,"Chris Olave","WR","Ohio State",A,"New Orleans Saints"],
+[211,"Dimitri Stanley","ATH","Colorado",O,"Out of NFL"],
+[212,"Nick Tarburton","ILB","Penn State",O,"Out of NFL"],
+[213,"Jeremiah Martin","WDE","Texas A&M",O,"Out of NFL"],
+[214,"Jarrett Patterson","OT","Notre Dame",O,"Out of NFL"],
+[215,"Christian Barmore","DT","Alabama",A,"New England Patriots"],
+[216,"Max Borghi","APB","Washington State",O,"Out of NFL"],
+[217,"Trey Dean III","S","Georgia/Florida",F,"Free agent"],
+[218,"Mike Edwards","OT","Wake Forest",O,"Out of NFL"],
+[219,"Devon Matthews","S","Indiana",O,"Out of NFL"],
+[220,"Al Blades Jr.","CB","Miami",O,"Out of NFL"],
+[221,"Tank Jenkins","OG","Texas A&M",O,"Out of NFL"],
+[222,"Malik Langham","SDE","Florida",O,"Out of NFL"],
+[223,"Vernon Jackson","ATH","Texas A&M",O,"Out of NFL"],
+[224,"Cameron Brown","WR","Ohio State",O,"Out of NFL"],
+[225,"Jerome Ford","APB","Alabama/Cincinnati",A,"Cleveland Browns"],
+[226,"K'Vaughan Pope","ILB","Ohio State",O,"Out of NFL"],
+[227,"Mustapha Muhammad","TE","Michigan",O,"Out of NFL"],
+[228,"Luke Matthews","OG","Texas A&M",O,"Out of NFL"],
+[229,"Daniel George","WR","Penn State",O,"Out of NFL"],
+[230,"Davin Cotton","DT","LSU",O,"Out of NFL"],
+[231,"Steve Stephens","S","Oregon",O,"Out of NFL"],
+[232,"Cam'ron Jones","S","Nebraska",O,"Out of NFL"],
+[233,"Cam Johnson","WR","Vanderbilt",O,"Out of NFL"],
+[234,"Tre Turner","WR","Virginia Tech",O,"Out of NFL"],
+[235,"Jackson Sirmon","OLB","Washington",O,"Out of NFL"],
+[236,"Seth Williams","WR","Auburn",O,"Out of NFL"],
+[237,"Marcus Murphy","ATH","Mississippi State",O,"Out of NFL"],
+[238,"Michael Wilson","WR","Stanford",F,"Free agent (ex-Cardinals)"],
+[239,"Tahj Rice","SDE","Duke",O,"Out of NFL"],
+[240,"Theo Day","PRO QB","Michigan State",O,"Out of NFL"],
+[241,"Chris Curry","RB","LSU",O,"Out of NFL"],
+[242,"Austin Osborne","WR","Washington",O,"Out of NFL"],
+[243,"Bumper Pool","ILB","Arkansas",F,"Free agent"],
+[244,"Jairus Brents","CB","Louisville/Kansas State",F,"Free agent"],
+[245,"Jaden Crumedy","WDE","Mississippi State",O,"Out of NFL"],
+[246,"Chris Oats","OLB","Kentucky",O,"Out of NFL"],
+[247,"Michael Harris","ILB","Auburn",O,"Out of NFL"]
+],
+2019:[
+[1,"Antonio Alfano","SDE","Alabama",O,"Out of NFL"],
+[2,"Derek Stingley Jr.","CB","LSU",A,"Houston Texans"],
+[3,"DeMarvin Leal","DT","Texas A&M",A,"Pittsburgh Steelers"],
+[4,"Nolan Smith","WDE","Georgia",A,"Philadelphia Eagles"],
+[5,"Travon Walker","DT","Georgia",A,"Jacksonville Jaguars"],
+[6,"Kayvon Thibodeaux","WDE","Oregon",A,"New York Giants"],
+[7,"Logan Brown","OT","Wisconsin",O,"Out of NFL"],
+[8,"Charles Cross","OT","Mississippi State",A,"Seattle Seahawks"],
+[9,"Spencer Rattler","PRO QB","Oklahoma/South Carolina",F,"Free agent"],
+[10,"Bru McCoy","ATH","Texas/USC",O,"Out of NFL"],
+[11,"John Emery Jr.","RB","LSU",O,"Out of NFL"],
+[12,"Brandon Smith","ILB","Penn State",O,"Out of NFL"],
+[13,"Lance Dixon","OLB","Penn State",O,"Out of NFL"],
+[14,"Trey Sanders","RB","Alabama/Texas A&M",O,"Out of NFL"],
+[15,"Kyle Hamilton","S","Notre Dame",A,"Baltimore Ravens"],
+[16,"Baylor Cupp","TE","Texas A&M",O,"Out of NFL"],
+[17,"Marcel Brooks","OLB","LSU",O,"Out of NFL"],
+[18,"Zacch Pickens","DT","South Carolina",A,"Chicago Bears"],
+[19,"Jadon Haselwood","WR","Oklahoma/Arkansas",F,"Free agent"],
+[20,"Tyrique Stevenson","CB","Georgia/Miami",A,"Chicago Bears"],
+[21,"Nakobe Dean","ILB","Georgia",F,"Free agent (ex-Eagles)"],
+[22,"Zach Harrison","SDE","Ohio State",A,"Tennessee Titans"],
+[23,"Daxton Hill","S","Michigan",A,"Cincinnati Bengals"],
+[24,"Tyler Owens","S","Texas Tech",A,"Jacksonville Jaguars"],
+[25,"Darnell Wright","OT","Tennessee",A,"Chicago Bears"],
+[26,"Jerrion Ealy","RB","Ole Miss",O,"Out of NFL"],
+[27,"George Karlaftis","SDE","Purdue",A,"Kansas City Chiefs"],
+[28,"Owen Pappoe","OLB","Auburn",O,"Out of NFL"],
+[29,"Garrett Wilson","WR","Ohio State",A,"New York Jets"],
+[30,"Scooby Carter","CB","Alabama",O,"Out of NFL"],
+[31,"Kyle Ford","WR","USC",O,"Out of NFL"],
+[32,"Evan Neal","OT","Alabama",F,"Free agent"],
+[33,"Sean Rhyan","OG","UCLA",F,"Free agent"],
+[34,"Kenyon Green","OT","Texas A&M",A,"Philadelphia Eagles"],
+[35,"Jayden Daniels","DUAL QB","Arizona State/LSU",A,"Washington Commanders"],
+[36,"Harry Miller","OC","Ohio State",O,"Out of NFL"],
+[37,"Theo Wease Jr.","WR","Oklahoma/Missouri",F,"Free agent"],
+[38,"Zach Charbonnet","RB","Michigan/UCLA",F,"Free agent (ex-Seahawks)"],
+[39,"Cam Smith","CB","South Carolina",A,"Miami Dolphins"],
+[40,"Wan'Dale Robinson","APB","Nebraska/Kentucky",A,"Tennessee Titans"],
+[41,"George Pickens","WR","Georgia",A,"Dallas Cowboys"],
+[42,"Andrew Booth Jr.","CB","Clemson",F,"Free agent"],
+[43,"Joe Ngata","WR","Clemson",O,"Out of NFL"],
+[44,"Dominick Blaylock","WR","Georgia",O,"Out of NFL"],
+[45,"Diwun Black","ILB","Florida/LSU",O,"Out of NFL"],
+[46,"Henry To'o To'o","OLB","Tennessee/Alabama",A,"Las Vegas Raiders"],
+[47,"Christopher Hinton","DT","Michigan",O,"Out of NFL"],
+[48,"Puka Nacua","WR","Washington/BYU",A,"Los Angeles Rams"],
+[49,"Khris Bogle","WDE","Florida/Alabama",O,"Out of NFL"],
+[50,"Nick Cross","S","Maryland",A,"Washington Commanders"],
+[51,"Wanya Morris","OT","Tennessee/Oklahoma",F,"Free agent"],
+[52,"Drake Jackson","SDE","USC",A,"San Francisco 49ers"],
+[53,"Caedan Wallace","OG","Penn State",F,"Free agent"],
+[54,"Jordan Battle","S","Alabama",A,"Cincinnati Bengals"],
+[55,"Clay Webb","OC","Georgia",O,"Out of NFL"],
+[56,"Demani Richardson","S","Texas A&M",F,"Free agent"],
+[57,"Jacob Bandes","DT","Washington",O,"Out of NFL"],
+[58,"Julian Barnett","CB","Michigan State",O,"Out of NFL"],
+[59,"Jordan Whittington","ATH","Texas",F,"Free agent"],
+[60,"Devontae Dobbs","OG","Michigan State",O,"Out of NFL"],
+[61,"Trent McDuffie","CB","Washington",A,"Kansas City Chiefs"],
+[62,"Bo Nix","DUAL QB","Auburn/Oregon",A,"Denver Broncos"],
+[63,"Mykael Wright","CB","Oregon",F,"Free agent"],
+[64,"Nathan Pickering","DT","Mississippi State",O,"Out of NFL"],
+[65,"Frank Ladson Jr.","WR","Clemson",O,"Out of NFL"],
+[66,"Adisa Isaac","WDE","Penn State",F,"Free agent"],
+[67,"Cade Stover","OLB","Ohio State",A,"Houston Texans"],
+[68,"Chris Steele","CB","Florida",O,"Out of NFL"],
+[69,"Jonah Tauanu'u","OT","Oregon",O,"Out of NFL"],
+[70,"Justin Eboigbe","SDE","Alabama",O,"Out of NFL"],
+[71,"Christian Harris","ILB","Alabama",A,"Houston Texans"],
+[72,"De'Gabriel Floyd","ILB","Texas",O,"Out of NFL"],
+[73,"Pierce Quick","OT","Alabama",O,"Out of NFL"],
+[74,"Kaiir Elam","CB","Florida",F,"Free agent (ex-Bills/Cowboys)"],
+[75,"Dylan Wright","WR","Texas A&M",O,"Out of NFL"],
+[76,"Byron Young","DT","Alabama",A,"Los Angeles Rams"],
+[77,"Jake Smith","WR","Texas",O,"Out of NFL"],
+[78,"Jeremiah Payton","WR","Miami",O,"Out of NFL"],
+[79,"Charles Moore","SDE","Auburn",O,"Out of NFL"],
+[80,"Ishmael Sopsher","DT","Alabama",O,"Out of NFL"],
+[81,"Zeke Correll","OC","Notre Dame",O,"Out of NFL"],
+[82,"Branson Bragg","OC","Stanford",O,"Out of NFL"],
+[83,"Mark-Antony Richards","ATH","Auburn",O,"Out of NFL"],
+[84,"Ty'Ron Hopper","OLB","Florida/Missouri",F,"Free agent"],
+[85,"Mycah Pittman","WR","Oregon",O,"Out of NFL"],
+[86,"Akeem Dent","CB","Florida State",O,"Out of NFL"],
+[87,"Tyler Johnson","OT","Texas",O,"Out of NFL"],
+[88,"Trejan Bridges","WR","Oklahoma",O,"Out of NFL"],
+[89,"Elijah Higgins","WR","Stanford",F,"Free agent"],
+[90,"Maurice Hampton Jr.","CB","LSU",O,"Out of NFL"],
+[91,"Jaren Handy","SDE","Auburn",O,"Out of NFL"],
+[92,"Nick Henrich","ILB","Nebraska",O,"Out of NFL"],
+[93,"Austin Stogner","TE","Oklahoma",O,"Out of NFL"],
+[94,"Langston Anderson","WR","Oklahoma State",O,"Out of NFL"],
+[95,"Lewis Cine","S","Georgia",F,"Free agent"],
+[96,"Mase Funa","ILB","Oregon",O,"Out of NFL"],
+[97,"David Bell","WR","Purdue",F,"Free agent"],
+[98,"Laiatu Latu","WDE","Washington/UCLA",A,"Indianapolis Colts"],
+[99,"Eric Gray","APB","Tennessee/Oklahoma",A,"New York Giants"],
+[100,"Bill Norton","SDE","Georgia",O,"Out of NFL"],
+[101,"Amari Kight","OT","Alabama",O,"Out of NFL"],
+[102,"Brandon Turnage","CB","Alabama/Ole Miss",O,"Out of NFL"],
+[103,"Rian Davis","OLB","Georgia",O,"Out of NFL"],
+[104,"Sam Howell","DUAL QB","North Carolina",A,"New Orleans Saints"],
+[105,"Tristan Sinclair","OLB","Stanford",O,"Out of NFL"],
+[106,"Jaden Payoute","ATH","Virginia Tech",O,"Out of NFL"],
+[107,"DeMarcco Hellams","S","Alabama",F,"Free agent"],
+[108,"Devyn Ford","RB","Penn State",O,"Out of NFL"],
+[109,"Trente Jones","OT","Michigan",O,"Out of NFL"],
+[110,"Tyrion Davis-Price","RB","LSU",F,"Free agent"],
+[111,"Ronnie Hickman","S","Ohio State",A,"Jacksonville Jaguars"],
+[112,"Dvon J-Thomas","DT","Penn State",O,"Out of NFL"],
+[113,"Jameson Williams","WR","Ohio State",A,"Detroit Lions"],
+[114,"Ray Parker","OT","LSU",O,"Out of NFL"],
+[115,"Ramel Keyton","WR","Tennessee",O,"Out of NFL"],
+[116,"Jowon Briggs","DT","Virginia/Cincinnati",O,"Out of NFL"],
+[117,"Kevin Harris","WDE","Alabama",O,"Out of NFL"],
+[118,"Will Putnam","OG","Clemson",O,"Out of NFL"],
+[119,"Enokk Vimahi","OG","Ohio State",O,"Out of NFL"],
+[120,"Andrew Kristofic","OT","Notre Dame",O,"Out of NFL"],
+[121,"Bryce Benhart","OT","Nebraska",O,"Out of NFL"],
+[122,"Faatui Tuitele","DT","Washington",O,"Out of NFL"],
+[123,"Quavaris Crouch","ATH","Tennessee",O,"Out of NFL"],
+[124,"Max Duggan","DUAL QB","TCU",F,"Free agent"],
+[125,"Joseph Charleston","S","Clemson",O,"Out of NFL"],
+[126,"Brian Williams","S","Texas A&M",O,"Out of NFL"],
+[127,"Mohamoud Diabate","OLB","Florida/Utah",F,"Free agent"],
+[128,"Donavon Greene","WR","Wake Forest",O,"Out of NFL"],
+[129,"Treylon Burks","WR","Arkansas",F,"Free agent"],
+[130,"Keaton Ellis","CB","Penn State",A,"Tampa Bay Buccaneers"],
+[131,"Ryan Hilinski","PRO QB","South Carolina/NW",O,"Out of NFL"],
+[132,"Marquez Beason","ATH","Illinois",O,"Out of NFL"],
+[133,"Keon Zipperer","TE","Florida",O,"Out of NFL"],
+[134,"Noa Pola-Gates","CB","Nebraska",O,"Out of NFL"],
+[135,"Breece Hall","RB","Iowa State",A,"New York Jets"],
+[136,"Marcus Banks","CB","Alabama",O,"Out of NFL"],
+[137,"Dannis Jackson","WR","Ole Miss",O,"Out of NFL"],
+[138,"Keontra Smith","S","Miami",O,"Out of NFL"],
+[139,"Daimarqua Foster","RB","TCU",O,"Out of NFL"],
+[140,"Joseph Anderson","SDE","South Carolina",O,"Out of NFL"],
+[141,"Hudson Henry","TE","Arkansas",O,"Out of NFL"],
+[142,"De'Monte Russell","WDE","Mississippi State",O,"Out of NFL"],
+[143,"King Mwikuta","WDE","Alabama",O,"Out of NFL"],
+[144,"Trezmen Marshall","ILB","Georgia",O,"Out of NFL"],
+[145,"Steele Chambers","ATH","Ohio State",A,"Cincinnati Bengals"],
+[146,"Doug Nester","OG","Virginia Tech/WVU",O,"Out of NFL"],
+[147,"Osita Smith","S","West Virginia",O,"Out of NFL"],
+[148,"Anthony Harris","S","North Carolina",O,"Out of NFL"],
+[149,"Bryan Hudson","OG","Virginia Tech",O,"Out of NFL"],
+[150,"Austin Jones","RB","Stanford",O,"Out of NFL"],
+[151,"Jude Wolfe","TE","USC",O,"Out of NFL"],
+[152,"Jestin Jacobs","OLB","Iowa",O,"Out of NFL"],
+[153,"Stephen Herron Jr.","WDE","Stanford",O,"Out of NFL"],
+[154,"Travis Jay","CB","Florida State",O,"Out of NFL"],
+[155,"Daniel Heimuli","ILB","Washington",O,"Out of NFL"],
+[156,"Shane Lee","ILB","Alabama/South Carolina",O,"Out of NFL"],
+[157,"Joe Tippmann","OT","Wisconsin",A,"New York Jets"],
+[158,"Jahfari Harvey","WDE","Miami",O,"Out of NFL"],
+[159,"Milton Wright","WR","Purdue",O,"Out of NFL"],
+[160,"Cornelius Johnson","WR","Michigan",O,"Out of NFL"],
+[161,"Karsen Barnhart","OG","Michigan",O,"Out of NFL"],
+[162,"Patrick Herbert","TE","Oregon",O,"Out of NFL"],
+[163,"Jaylen McCollough","S","Tennessee",F,"Free agent"],
+[164,"Hakeem Beamon","SDE","Penn State",O,"Out of NFL"],
+[165,"Braylen Ingraham","SDE","Alabama",O,"Out of NFL"],
+[166,"Ty Robinson","SDE","Nebraska",F,"Free agent"],
+[167,"Avery Huff","OLB","Miami",O,"Out of NFL"],
+[168,"Stacey Wilkins","OT","Oklahoma",O,"Out of NFL"],
+[169,"Myron Warren","SDE","Texas",O,"Out of NFL"],
+[170,"Mazi Smith","DT","Michigan",A,"Dallas Cowboys"],
+[171,"Derick Hall","WDE","Auburn",A,"Seattle Seahawks"],
+[172,"Savion Jackson","SDE","NC State",O,"Out of NFL"],
+[173,"C.J. Clark","DT","NC State",O,"Out of NFL"],
+[174,"Jason Blissett","DT","Miami",O,"Out of NFL"],
+[175,"Roman Harrison","WDE","Tennessee",O,"Out of NFL"],
+[176,"Graham Mertz","PRO QB","Wisconsin/Florida",F,"Free agent"],
+[177,"Jacob Lacey","DT","Notre Dame",O,"Out of NFL"],
+[178,"Eugene Asante","OLB","North Carolina",O,"Out of NFL"],
+[179,"Nolan Rumler","OG","Michigan",O,"Out of NFL"],
+[180,"Taulia Tagovailoa","PRO QB","Alabama/Maryland",F,"Free agent"],
+[181,"Triston Miller","OT","North Carolina",O,"Out of NFL"],
+[182,"Quinn Carroll","OT","Notre Dame",O,"Out of NFL"],
+[183,"Sampson James","RB","Indiana",O,"Out of NFL"],
+[184,"Trevor Keegan","OT","Michigan",O,"Out of NFL"],
+[185,"John Dunmore","WR","Penn State",O,"Out of NFL"],
+[186,"Tanner Bowles","OG","Alabama",O,"Out of NFL"],
+[187,"Jaydon Hill","CB","Florida",O,"Out of NFL"],
+[188,"Xavier Truss","OT","Georgia",O,"Out of NFL"],
+[189,"Devonta Lee","ATH","LSU",O,"Out of NFL"],
+[190,"Zion Puckett","S","Auburn",O,"Out of NFL"],
+[191,"Jack Kiser","OLB","Notre Dame",O,"Out of NFL"],
+[192,"Chris Adimora","S","Texas",O,"Out of NFL"],
+[193,"David Gbenda","ILB","Texas",O,"Out of NFL"],
+[194,"J.R. Walker","ATH","Virginia Tech",O,"Out of NFL"],
+[195,"Colby Bowman","WR","Stanford",O,"Out of NFL"],
+[196,"Dylan Jordan","OLB","TCU",O,"Out of NFL"],
+[197,"Marvin Ham","ILB","Colorado",O,"Out of NFL"],
+[198,"Asa Turner","ATH","Washington",O,"Out of NFL"],
+[199,"Darrian Dalcourt","OG","Alabama",O,"Out of NFL"],
+[200,"Darien Chase","ATH","Nebraska",O,"Out of NFL"],
+[201,"Raydarious Jones","ATH","LSU",O,"Out of NFL"],
+[202,"Kane Patterson","ILB","Clemson",O,"Out of NFL"],
+[203,"Isaiah Foskey","WDE","Notre Dame",A,"New Orleans Saints"],
+[204,"Siaki Ika","DT","LSU",A,"Cleveland Browns"],
+[205,"Cam Kelly","ATH","Auburn",O,"Out of NFL"],
+[206,"Quashon Fuller","SDE","Florida State",O,"Out of NFL"],
+[207,"Erick Young","CB","Texas A&M",O,"Out of NFL"],
+[208,"Brayden Liebrock","TE","Texas",O,"Out of NFL"],
+[209,"Bryton Constantin","OLB","Clemson",O,"Out of NFL"],
+[210,"Tyler Rudolph","S","Penn State",O,"Out of NFL"],
+[211,"Jirehl Brock","RB","Iowa State",O,"Out of NFL"],
+[212,"Cameron Williams","OLB","Indiana",O,"Out of NFL"],
+[213,"Nick Broeker","OT","Ole Miss",O,"Out of NFL"],
+[214,"Troy Fautanu","OG","Washington",A,"Pittsburgh Steelers"],
+[215,"Alante Brown","WR","Texas Tech",O,"Out of NFL"],
+[216,"Josh Delgado","WR","Oregon",O,"Out of NFL"],
+[217,"EJ Ndoma-Ogar","OG","Oklahoma",O,"Out of NFL"],
+[218,"Grayson Boomer","TE","Oklahoma State",O,"Out of NFL"],
+[219,"Christian Williams","CB","Miami",O,"Out of NFL"],
+[220,"David Ojabo","SDE","Michigan",F,"Free agent"],
+[221,"Andre White Jr.","ILB","Texas A&M",O,"Out of NFL"],
+[222,"NaNa Osafo-Mensah","WDE","Notre Dame",O,"Out of NFL"],
+[223,"Salim Turner-Muhammad","CB","Stanford",O,"Out of NFL"],
+[224,"Jordan Wilmore","APB","Utah",O,"Out of NFL"],
+[225,"Ja'Varrius Johnson","WR","Auburn",O,"Out of NFL"],
+[226,"Kamren Fabiculanan","CB","Washington",O,"Out of NFL"],
+[227,"Tyler Davis","DT","Clemson",A,"Jacksonville Jaguars"],
+[228,"Mataio Soli","WDE","Arkansas",O,"Out of NFL"],
+[229,"Donte Starks","ILB","LSU",O,"Out of NFL"],
+[230,"Orin Patu","OLB","California",O,"Out of NFL"],
+[231,"Isaiah Rutherford","CB","Notre Dame",O,"Out of NFL"],
+[232,"Isaiah Spiller","RB","Texas A&M",F,"Free agent"],
+[233,"Giles Jackson","WR","Michigan",O,"Out of NFL"],
+[234,"Joey Porter Jr.","CB","Penn State",A,"Pittsburgh Steelers"],
+[235,"Ryland Goede","TE","Georgia",O,"Out of NFL"],
+[236,"Tyler Fromm","TE","Auburn",O,"Out of NFL"],
+[237,"Isaiah Hookfin","OT","Texas",O,"Out of NFL"],
+[238,"Logan Cash","SDE","Clemson",O,"Out of NFL"],
+[239,"DJ Dale","DT","Alabama",F,"Free agent (ex-Eagles)"],
+[240,"Matt Goncalves","OT","Pittsburgh",A,"Pittsburgh Steelers"],
+[241,"Tyus Fields","CB","Tennessee",O,"Out of NFL"],
+[242,"Josh Calvert","ILB","Washington",O,"Out of NFL"],
+[243,"Warren McClendon","OT","Georgia",F,"Free agent"],
+[244,"Bryson Shaw","S","Ohio State",O,"Out of NFL"],
+[245,"Duke Clemens","OG","UCLA",O,"Out of NFL"],
+[246,"Trey Palmer","WR","LSU/Nebraska",A,"Tampa Bay Buccaneers"],
+[247,"Zach Williams","WDE","Arkansas",O,"Out of NFL"]
+]};
+
+let cc=2017, fil=[...D[2017]], statusFilter='', pg=0;
+const PR=25;
+
+function sw(yr){
+  cc=yr;
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',(i===0&&yr===2017)||(i===1&&yr===2018)||(i===2&&yr===2019)));
+  bpf();
+  statusFilter='';
+  fil=[...D[yr]];
+  document.getElementById('sq').value='';
+  document.getElementById('sp').value='';
+  updatePills('');
+  pg=0;rs();rn();
+}
+
+function bpf(){
+  const s=document.getElementById('sp');
+  const pos=[...new Set(D[cc].map(p=>p[2]))].sort();
+  s.innerHTML='<option value="">All positions</option>';
+  pos.forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p;s.appendChild(o);});
+}
+
+function setStatus(st){
+  statusFilter=st;
+  updatePills(st);
+  af();
+}
+
+function updatePills(st){
+  document.getElementById('pill-all').classList.toggle('selected', st==='');
+  document.getElementById('pill-a').classList.toggle('selected', st===A);
+  document.getElementById('pill-f').classList.toggle('selected', st===F);
+  document.getElementById('pill-o').classList.toggle('selected', st===O);
+}
+
+function af(){
+  const q=document.getElementById('sq').value.toLowerCase();
+  const pos=document.getElementById('sp').value;
+  fil=D[cc].filter(p=>{
+    if(q&&!p[1].toLowerCase().includes(q)&&!p[5].toLowerCase().includes(q))return false;
+    if(statusFilter&&p[4]!==statusFilter)return false;
+    if(pos&&p[2]!==pos)return false;
+    return true;
+  });
+  pg=0;rn();
+}
+
+function gp(d){
+  const max=Math.max(0,Math.ceil(fil.length/PR)-1);
+  pg=Math.max(0,Math.min(max,pg+d));
+  rn();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function rs(){
+  const data=D[cc];
+  const ac=data.filter(p=>p[4]===A).length;
+  const fr=data.filter(p=>p[4]===F).length;
+  const ou=data.filter(p=>p[4]===O).length;
+  const pc=Math.round((ac+fr)/data.length*100);
+  document.getElementById('statsBar').innerHTML=`<div class="stats">
+    <div class="stat"><div class="stat-val green">${ac}</div><div class="stat-label">Active</div></div>
+    <div class="stat"><div class="stat-val blue">${fr}</div><div class="stat-label">Fringe/FA</div></div>
+    <div class="stat"><div class="stat-val gray">${ou}</div><div class="stat-label">Out</div></div>
+    <div class="stat"><div class="stat-val white">${pc}%</div><div class="stat-label">In League</div></div>
+  </div>`;
+}
+
+function rn(){
+  const start=pg*PR;
+  const slice=fil.slice(start,start+PR);
+  const listEl=document.getElementById('list');
+  const emptyEl=document.getElementById('empty');
+  const prevBtn=document.getElementById('prevBtn');
+  const nextBtn=document.getElementById('nextBtn');
+
+  if(!slice.length){
+    listEl.innerHTML='';
+    emptyEl.style.display='block';
+  } else {
+    emptyEl.style.display='none';
+    listEl.innerHTML=slice.map(p=>{
+      const bl=p[4]===A?'Active':p[4]===F?'Fringe':' Out ';
+      const isOut=p[4]===O;
+      return`<div class="card">
+        <div class="rank-col"><div class="rank">${p[0]}</div></div>
+        <div class="info-col">
+          <div class="player-name">${p[1]}</div>
+          <div class="player-meta">
+            <span class="pos-tag">${p[2]}</span>
+            <span>${p[3]}</span>
+          </div>
+          <div class="nfl-line${isOut?' out':''}">${p[5]}</div>
+        </div>
+        <div class="status-col"><span class="badge ${p[4]}">${bl}</span></div>
+      </div>`;
+    }).join('');
+  }
+
+  const tot=Math.max(1,Math.ceil(fil.length/PR));
+  document.getElementById('pgInfo').innerHTML=`<span style="font-weight:600;color:var(--text)">${pg+1}</span> / ${tot}<br><span style="font-size:11px">${fil.length} players</span>`;
+  prevBtn.disabled=pg===0;
+  nextBtn.disabled=pg>=tot-1;
+}
+
+bpf();
+updatePills('');
+rs();
+rn();
+</script>
+</body>
+</html>
